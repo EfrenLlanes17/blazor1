@@ -1,10 +1,96 @@
 ﻿@page "/"
 
+@rendermode InteractiveServer
+
+
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
+<button @onclick="ShowDate">What’s today?</button>
 
-<Counter IncrementAmount="10" />
+<p>@displayText</p>
+
+
+<button @onclick="ShowAlphabet">Alphabet</button>
+
+<ol>
+    @foreach (var letter in displayedAlphabet)
+    {
+        <li>@letter</li>
+    }
+</ol>
+
+
+<h4>Random Number Table</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var number in randomNumbers)
+        {
+            <tr>
+                <td>@number</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@code{
+    private Random random = new Random();
+
+    private string displayText = "Who cares?";
+
+    private bool alphaOn = false;
+
+    private List<int> randomNumbers = new List<int>();
+
+    private List<char> displayedAlphabet = new List<char>();
+
+     protected override void OnInitialized()
+    {
+        GenerateRandomNumbers();
+    }
+
+
+    private void ShowDate()
+    {
+        displayText = DateTime.Now.ToString("M/d/yyyy"); 
+    }
+
+    private int getRand()
+    {
+        return random.Next(1, 11); 
+    }
+
+     private void ShowAlphabet()
+    {
+        if(!alphaOn){
+        int length = random.Next(1, 27);
+        displayedAlphabet = "abcdefghijklmnopqrstuvwxyz".Take(length).ToList();
+        alphaOn = true;
+        }
+        else{
+            displayedAlphabet = "".Take(0).ToList();
+            alphaOn = false;
+        }
+    }
+
+     private void GenerateRandomNumbers()
+    {
+        int count = random.Next(1, 11); 
+        randomNumbers = Enumerable.Range(0, count)
+                                  .Select(_ => random.Next(1, 51)) 
+                                  .ToList();
+    }
+}
+
+
+<Counter IncrementAmount="getRand()" />
