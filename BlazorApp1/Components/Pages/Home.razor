@@ -1,4 +1,6 @@
 ﻿@page "/"
+@page "/{count:int?}"
+
 
 @rendermode InteractiveServer
 
@@ -50,6 +52,9 @@ Welcome to your new app.
 
     private bool alphaOn = false;
 
+    [Parameter]
+    public int count { get; set; }
+
     private List<int> randomNumbers = new List<int>();
 
     private List<char> displayedAlphabet = new List<char>();
@@ -57,6 +62,7 @@ Welcome to your new app.
      protected override void OnInitialized()
     {
         GenerateRandomNumbers();
+       
     }
 
 
@@ -85,7 +91,9 @@ Welcome to your new app.
 
      private void GenerateRandomNumbers()
     {
-        int count = random.Next(1, 11); 
+       if(count == 0){
+        count = random.Next(1,11);
+       }
         randomNumbers = Enumerable.Range(0, count)
                                   .Select(_ => random.Next(1, 51)) 
                                   .ToList();
