@@ -11,12 +11,22 @@
 
 Welcome to your new app.
 
-<button @onclick="ShowDate">What’s today?</button>
+@* <button @onclick="ShowDate">What’s today?</button> *@
+
+<button @onclick='() => displayText = DateTime.Now.ToString("M/d/yyyy")' >What’s today?</button>
 
 <p>@displayText</p>
 
 
 <button @onclick="ShowAlphabet">Alphabet</button>
+
+<input @onchange="OnChange1">
+<p>@Name</p>
+
+<input @oninput="OnInput">
+<p>@Adress</p>
+
+
 
 <ol>
     @foreach (var letter in displayedAlphabet)
@@ -46,6 +56,8 @@ Welcome to your new app.
 
 
 @code{
+    public string Name;
+    public string Adress;
     private Random random = new Random();
 
     private string displayText = "Who cares?";
@@ -97,6 +109,14 @@ Welcome to your new app.
         randomNumbers = Enumerable.Range(0, count)
                                   .Select(_ => random.Next(1, 51)) 
                                   .ToList();
+    }
+
+    public void OnChange1(ChangeEventArgs e){
+        Name = (string)e.Value;
+    }
+
+    public void OnInput(ChangeEventArgs e){
+        Adress = (string)e.Value;
     }
 }
 
