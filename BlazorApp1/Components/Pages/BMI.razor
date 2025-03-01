@@ -1,0 +1,72 @@
+﻿@page "/bmi"
+@rendermode InteractiveServer
+
+
+<PageTitle>BMI</PageTitle>
+
+<div class="boxes">
+
+<h1>Weight</h1>
+<input type="number" @bind="weight">
+
+<h1>Height (Feet)</h1>
+<input type="number" @bind="feet">
+
+<h1>Height (Inches)</h1>
+<input type="number" @bind="inches">
+
+</div>
+
+<div class="Answer">
+@if(weight != 0 && feet != 0){
+<h1>BMI: @calcBMI() </h1>
+}
+</div>
+
+
+
+<style>
+    .boxes {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 300px;
+        margin: auto;
+    }
+
+    .boxes h1 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .boxes input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .Answer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+</style>
+
+
+@code{
+    public double weight = 0;
+
+    public double feet = 0;
+
+    public double inches = 0;
+
+    public double bmi= 0.0;
+
+    public double calcBMI(){
+        return (weight/(((feet*12)+inches) * ((feet*12)+inches) ))* 703;
+    }
+
+}

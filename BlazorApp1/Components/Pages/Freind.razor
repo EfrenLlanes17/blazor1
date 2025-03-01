@@ -5,6 +5,22 @@
 
 <PageTitle>Freind</PageTitle>
 
-<h1 >Jason and Nathan</h1>
+<h1 @onmouseover="mouseOver" @onmouseout="mouseOut" style="color:@currentColor">Jason and Nathan</h1>
 
 <img src="/images/jasonAiPic.jfif" alt="Jason"> 
+
+@code{
+    private string currentColor = "black";
+    private readonly string[] colors = { "red", "yellow", "green", "purple", "orange" };
+    private Random random = new Random();
+
+    public void mouseOver()
+    {
+        currentColor = "Blue"; 
+    }
+
+    public void mouseOut()
+    {
+        currentColor = colors[random.Next(colors.Length)]; 
+    }
+}
