@@ -20,10 +20,10 @@ Welcome to your new app.
 
 <button @onclick="ShowAlphabet">Alphabet</button>
 
-<input @onchange="OnChange1">
+<input @bind="Name">
 <p>@Name</p>
 
-<input @oninput="OnInput">
+<input @bind="Adress" @bind:event="oninput">
 <p>@Adress</p>
 
 
