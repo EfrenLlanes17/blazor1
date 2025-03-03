@@ -1,0 +1,53 @@
+﻿@page "/breakfast"
+@rendermode InteractiveServer
+
+
+<PageTitle>BMI</PageTitle>
+
+<button @onclick="pourCoffee">Pour Coffee</button>
+<p>@coffee</p>
+
+<button @onclick="FryEggs">Fry Eggs</button>
+<p>@eggStatus</p>
+
+<button @onclick="FryEggsAsync">Fry Eggs Async</button>
+<p>@eggStatusAsync</p>
+
+
+@code{
+    public string coffee;
+
+    public string eggStatus;
+
+    public string eggStatusAsync;
+
+public void pourCoffee(){
+ coffee = DateTime.Now.ToString("hh:mm:ss tt");
+}
+
+private void FryEggs()
+{
+        eggStatus = "";
+        eggStatus = "cooking the eggs ...";
+        Task.Delay(3000).Wait();
+        eggStatus = "cooking the eggs ...";
+        Task.Delay(3000).Wait();
+        eggStatus = "Put eggs on plate";
+
+    }
+
+    private async Task FryEggsAsync()
+        {
+            eggStatusAsync = "";
+            eggStatusAsync = "warming the pan ...";
+            await Task.Delay(3000);
+            eggStatusAsync = "cooking the eggs ...";
+            await Task.Delay(3000);
+            eggStatusAsync = "Put eggs on plate";
+            this.StateHasChanged();
+
+        }
+
+
+
+}
