@@ -16,6 +16,7 @@
     <div>File name: @FileName</div>
     <div>File size: @FileSize.ToString("n0") bytes</div>
     <div>File type: @FileType</div>
+    <div>List Size: @ListSize</div>
     <div>Last modified: @LastModified</div>
 </div>
 
@@ -29,10 +30,13 @@
     public string FileName { get; set; } = "";
     public long FileSize { get; set; }
     public string FileType { get; set; } = "";
+    public string ListSize { get; set; } = "";
     public DateTimeOffset LastModified { get; set; }
     public string ErrorMessage { get; set; } = "";
 
     const int MAX_FILESIZE = 5000 * 1024; // 2 MB
+
+    private Dictionary<string, List<Entry>> readerEvents = new();
 
     public async Task FileUploaded(InputFileChangeEventArgs e)
     {
@@ -56,6 +60,38 @@
                 var destinationStream = new FileStream(targetFilePath, FileMode.Create);
                 await fileStream.CopyToAsync(destinationStream);
                 destinationStream.Close();
+
+        
+
+        using var stream = File.OpenRead(targetFilePath);
+        using var reader = new StreamReader(stream);
+
+        string line;
+        bool firstLine = true;
+        while ((line = await reader.ReadLineAsync()) != null)
+        {
+            //columns[0] Time
+            //columns[1] pp location
+            //columns[2] room location
+            //columns[3] Hash
+            //columns[4] DevID
+            //columns[5] Matchine
+            if(!firstLine){
+            var columns = line.Split(',');
+             Entries.Add(new Entry(columns[0],columns[1],columns[2],columns[3],int.Parse(columns[4]),int.Parse(columns[5]))); 
+             }
+             else{
+                firstLine = false;
+             }
+        }
+
+          ListSize = Entries.Count.ToString();
+
+
+
+
+
+
             }
             catch (Exception exception)
             {
@@ -63,4 +99,30 @@
             }
         }
     }
+
+public class Entry
+    {
+        public string time { get; } = "";
+        public string Location { get; } = "";
+        public string ReaderDesc { get; } = "";
+        public string IDHash { get;} = "";
+        public int DevID { get; } 
+        public int Machine { get;}
+
+        public Entry(string time, string Location ,string ReaderDesc , string IDHash, int DevID, int Machine){
+
+            this.time = time;
+            this.Location = Location;
+            this.ReaderDesc = ReaderDesc;
+            this.IDHash = IDHash;
+            this.DevID = DevID;
+            this.Machine = Machine;
+
+        }
+    }
+
+
+    public List<Entry> Entries = new();
+
+
 }
