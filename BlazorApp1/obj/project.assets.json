@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj",
+      "projectUniqueName": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj",
       "projectName": "BlazorApp1",
-      "projectPath": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj",
+      "projectPath": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj",
       "packagesPath": "C:\\Users\\efren\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\obj\\",
+      "outputPath": "C:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\efren\\AppData\\Roaming\\NuGet\\NuGet.Config",

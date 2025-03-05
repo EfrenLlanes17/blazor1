@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj": {}
+    "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj": {}
   },
   "projects": {
-    "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj": {
+    "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj",
+        "projectUniqueName": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj",
         "projectName": "BlazorApp1",
-        "projectPath": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\BlazorApp1.csproj",
+        "projectPath": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\BlazorApp1.csproj",
         "packagesPath": "C:\\Users\\efren\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-4\\BlazorApp1\\obj\\",
+        "outputPath": "c:\\Users\\efren\\OneDrive\\Desktop\\Code Projects\\blaze1\\blazor1-5\\BlazorApp1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\efren\\AppData\\Roaming\\NuGet\\NuGet.Config",

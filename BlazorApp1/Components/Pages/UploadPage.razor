@@ -1,7 +1,6 @@
 ﻿@page "/upload"
 @rendermode InteractiveServer
 
-
 <PageTitle>Upload</PageTitle>
 
 <h1>Blazor Server File Upload</h1>
@@ -25,6 +24,26 @@
     <div>Error: @ErrorMessage</div>
 }
 
+<h2>Reader Events Summary</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Reader ID</th>
+            <th>Reader Name</th>
+            <th>Event Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in readerEvents)
+        {
+            <tr>
+                <td>@entry.Key</td>
+                <td>@entry.Value.FirstOrDefault()?.ReaderDesc</td>
+                <td>@entry.Value.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
     public string FileName { get; set; } = "";
@@ -34,95 +53,96 @@
     public DateTimeOffset LastModified { get; set; }
     public string ErrorMessage { get; set; } = "";
 
-    const int MAX_FILESIZE = 5000 * 1024; // 2 MB
+    const int MAX_FILESIZE = 5000 * 1024; // 5 MB
 
-    private Dictionary<string, List<Entry>> readerEvents = new();
+    private Dictionary<string, List<ReaderEvent>> readerEvents = new();
+    private List<ReaderEvent> Entries = new();
 
     public async Task FileUploaded(InputFileChangeEventArgs e)
+{
+    var browserFile = e.File;
+
+    if (browserFile != null)
     {
-        var browserFile = e.File;
+        FileSize = browserFile.Size;
+        FileType = browserFile.ContentType;
+        FileName = browserFile.Name;
+        LastModified = browserFile.LastModified;
 
-        if (browserFile != null)
+        try
         {
-            FileSize = browserFile.Size;
-            FileType = browserFile.ContentType;
-            FileName = browserFile.Name;
-            LastModified = browserFile.LastModified;
+            using var memoryStream = new MemoryStream();
+            await browserFile.OpenReadStream(MAX_FILESIZE).CopyToAsync(memoryStream);
 
-            try
+            // Reset stream position before reading
+            memoryStream.Position = 0;
+            using var reader = new StreamReader(memoryStream);
+
+            string line;
+            bool firstLine = true;
+            Entries.Clear();
+
+            while ((line = await reader.ReadLineAsync()) != null)
             {
-                var fileStream = browserFile.OpenReadStream(MAX_FILESIZE);
+                if (!firstLine)
+                {
+                    var columns = line.Split(',');
+                    Entries.Add(new ReaderEvent(columns[0], columns[1], columns[2], columns[3], int.Parse(columns[4]), int.Parse(columns[5])));
+                }
+                else
+                {
+                    firstLine = false;
+                }
+            }
 
-                
-                var extension = Path.GetExtension(browserFile.Name);
-                var targetFilePath = Path.ChangeExtension(browserFile.Name, extension);
-
-                var destinationStream = new FileStream(targetFilePath, FileMode.Create);
-                await fileStream.CopyToAsync(destinationStream);
-                destinationStream.Close();
-
-        
-
-        using var stream = File.OpenRead(targetFilePath);
-        using var reader = new StreamReader(stream);
-
-        string line;
-        bool firstLine = true;
-        while ((line = await reader.ReadLineAsync()) != null)
-        {
-            //columns[0] Time
-            //columns[1] pp location
-            //columns[2] room location
-            //columns[3] Hash
-            //columns[4] DevID
-            //columns[5] Matchine
-            if(!firstLine){
-            var columns = line.Split(',');
-             Entries.Add(new Entry(columns[0],columns[1],columns[2],columns[3],int.Parse(columns[4]),int.Parse(columns[5]))); 
-             }
-             else{
-                firstLine = false;
-             }
+            ListSize = Entries.Count.ToString();
+            readerEvents = OrganizeEventsByReader(Entries);
         }
-
-          ListSize = Entries.Count.ToString();
-
-
-
-
-
-
-            }
-            catch (Exception exception)
-            {
-                ErrorMessage = exception.Message;
-            }
+        catch (Exception exception)
+        {
+            ErrorMessage = exception.Message;
         }
     }
+}
 
-public class Entry
+
+    private Dictionary<string, List<ReaderEvent>> OrganizeEventsByReader(List<ReaderEvent> events)
     {
-        public string time { get; } = "";
-        public string Location { get; } = "";
-        public string ReaderDesc { get; } = "";
-        public string IDHash { get;} = "";
-        public int DevID { get; } 
-        public int Machine { get;}
+        var dictionary = new Dictionary<string, List<ReaderEvent>>();
 
-        public Entry(string time, string Location ,string ReaderDesc , string IDHash, int DevID, int Machine){
+        foreach (var evt in events)
+        {
+            string readerId = $"{evt.DevID}-{evt.Machine}";
 
-            this.time = time;
-            this.Location = Location;
-            this.ReaderDesc = ReaderDesc;
-            this.IDHash = IDHash;
-            this.DevID = DevID;
-            this.Machine = Machine;
-
+            if (!dictionary.ContainsKey(readerId))
+            {
+                dictionary[readerId] = new List<ReaderEvent> { evt };
+            }
+            else
+            {
+                dictionary[readerId].Add(evt);
+            }
         }
+        return dictionary;
     }
 
+    public class ReaderEvent
+    {
+        public string Time { get; }
+        public string Location { get; }
+        public string ReaderDesc { get; }
+        public string IDHash { get; }
+        public int DevID { get; }
+        public int Machine { get; }
 
-    public List<Entry> Entries = new();
-
-
+        public ReaderEvent(string time, string location, string readerDesc, string idHash, int devID, int machine)
+        {
+            Time = time;
+            Location = location;
+            ReaderDesc = readerDesc;
+            IDHash = idHash;
+            DevID = devID;
+            Machine = machine;
+        }
+    }
 }
